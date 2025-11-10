@@ -6,7 +6,8 @@ TABLE clients{
   client_id INT [primary key]
   name_client VARCHAR(50)
   INN VARCHAR(12)
-  status_id INT 
+  status VARCHAR(10)
+  code_id INT
 }
 
 TABLE payments_code{
@@ -23,12 +24,7 @@ TABLE payments{
   amount DECIMAL(10, 2)
   time_payment TIMESTAMP
 }
-TABLE clients_status{
-  status_id INT [primary key]
-  name_status VARCHAR(20)
-  code_id INT
-}
+
 REF: clients.client_id < payments.client_id
 REF: payments_code.code_id < payments.code_id
-REF: clients_status.status_id < clients.status_id
-REF: payments_code.code_id < clients_status.code_id
+REF: payments_code.code_id < clients.code_id
