@@ -1,0 +1,35 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+
+TABLE clients{
+  client_id INT [primary key]
+  name_client VARCHAR(50)
+  INN VARCHAR(12)
+  status_id INT 
+}
+
+TABLE block_code{
+  code_id INT [primary key]
+  code_name VARCHAR(20)
+  code_description VARCHAR(100)
+  category VARCHAR(10)
+}
+
+TABLE payments{
+  payment_id INT [primary key]
+  client_id INT
+  code_id INT 
+  amount DECIMAL(10, 2)
+  time_paymaent TIMESTAMP
+}
+TABLE client_status{
+  status_id INT [primary key]
+  name_status VARCHAR(20)
+  description_status VARCHAR(100)
+  code_id INT
+}
+REF: clients.client_id < payments.client_id
+REF: block_code.code_id < payments.code_id
+REF: client_status.status_id < clients.status_id
+REF: block_code.code_id < client_status.code_id
