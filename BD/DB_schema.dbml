@@ -23,6 +23,7 @@ TABLE payments{
   code_id INT 
   amount DECIMAL(10, 2)
   time_payment TIMESTAMP
+  blocked BOOLEAN
 }
 
 REF: clients.client_id < payments.client_id
