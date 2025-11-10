@@ -21,7 +21,7 @@ TABLE payments{
   client_id INT
   code_id INT 
   amount DECIMAL(10, 2)
-  time_paymaent TIMESTAMP
+  time_payment TIMESTAMP
 }
 TABLE clients_status{
   status_id INT [primary key]
