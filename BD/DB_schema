@@ -26,10 +26,9 @@ TABLE payments{
 TABLE clients_status{
   status_id INT [primary key]
   name_status VARCHAR(20)
-  description_status VARCHAR(100)
   code_id INT
 }
 REF: clients.client_id < payments.client_id
 REF: payments_code.code_id < payments.code_id
 REF: clients_status.status_id < clients.status_id
-REF: payments.code_id < clients_status.code_id
+REF: payments_code.code_id < clients_status.code_id
