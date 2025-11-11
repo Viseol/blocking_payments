@@ -1,20 +1,17 @@
 // Use DBML to define your database structure
 // Docs: https://dbml.dbdiagram.io/docs
 
-
 TABLE clients{
   client_id INT [primary key]
   name_client VARCHAR(50)
   INN VARCHAR(12)
-  status VARCHAR(10)
-  code_id INT
 }
 
 TABLE payments_code{
   code_id INT [primary key]
   code_name VARCHAR(20)
   code_description VARCHAR(100)
-  category VARCHAR(10)
+  category VARCHAR(10) 
 }
 
 TABLE payments{
@@ -25,7 +22,16 @@ TABLE payments{
   time_payment TIMESTAMP
   blocked BOOLEAN
 }
+TABLE block_history{
+  history_id INT [primary key]
+  client_id INT
+  action VARCHAR(10)                
+  code_id INT               
+  initiated_by VARCHAR(100)         
+  initiated_at TIMESTAMP                                  
+}
 
+REF: clients.client_id < block_history.client_id
+REF: payments_code.code_id < block_history.code_id
 REF: clients.client_id < payments.client_id
 REF: payments_code.code_id < payments.code_id
-REF: payments_code.code_id < clients.code_id
