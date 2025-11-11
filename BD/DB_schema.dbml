@@ -1,4 +1,4 @@
-// Use DBML to define your database structure
+// Use DBML to define your database structure п
 // Docs: https://dbml.dbdiagram.io/docs
 
 TABLE clients{
