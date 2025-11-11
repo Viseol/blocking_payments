@@ -1,1 +1,188 @@
+openapi: 3.0.3
+info:
+  title: Blocking Client API
+  version: '1.0'
+  description: 'Спецификация API для управления блокировками платежей клиентов. Реализует операции блокировки, разблокировки и проверки статуса.'
 
+paths:
+  /Client/{client_id}/blockAll:
+    post:
+      description: 'Заблокировать все платежи клиента по ID'
+      parameters:
+        - in: path
+          name: client_id
+          description: 'ID клиента'
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: code_id
+          description: 'ID кода блокировки (определяет категорию и причину)'
+          required: true
+          schema:
+            type: integer
+            example: 3
+        - in: query
+          name: initiated_by
+          description: 'Имя сотрудника, совершающего блокировку'
+          required: true
+          schema:
+            type: string
+            example: 'employer_123'
+      responses:
+        '200':
+          description: 'Платежи клиента успешно заблокированы'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlockInfo'
+        '404':
+          description: 'Нет клиента с таким ID'
+        '409':
+          description: 'Нет такого статуса блокировки'
+
+  /Client/{client_id}/unblockAll:
+    post:
+      description: 'Разблокировать все платежи клиента по ID'
+      parameters:
+        - in: path
+          name: client_id
+          description: 'ID клиента'
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: initiated_by
+          description: 'Имя сотрудника, совершающего разблокировку'
+          required: true
+          schema:
+            type: string
+            example: 'employer_123'
+      responses:
+        '200':
+          description: 'Платежи клиента успешно разблокированы'
+        '404':
+          description: 'Нет клиента с таким ID'
+
+  /Client/{client_id}/getStatus:
+    get:
+      description: 'Проверить детальную информацию о статусе блокировок клиента'
+      parameters:
+        - in: path
+          name: client_id
+          description: 'ID клиента'
+          required: true
+          schema:
+            type: integer
+            example: 123
+      responses:
+        '200':
+          description: 'Информация о статусе блокировки получена'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BlockInfo'
+        '404':
+          description: 'Клиент не найден'
+
+  /Client/{client_id}/blockStatus:
+    get:
+      description: 'Проверить, заблокирован ли клиент'
+      parameters:
+        - in: path
+          name: client_id
+          description: 'ID клиента'
+          required: true
+          schema:
+            type: integer
+            example: 123
+      responses:
+        '200':
+          description: 'Статус клиента получен'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  block_status:
+                    type: string
+                    example: 'BLOCKED'
+        '404':
+          description: 'Клиент не найден'
+
+
+components:
+  schemas:
+    Client:
+      type: object
+      properties:
+        client_id:
+          type: integer
+          example: 123
+        name_client:
+          type: string
+          example: 'ООО Чайная Железногорска'
+        INN:
+          type: string
+          example: '123456789012'
+        block_info:
+          $ref: '#/components/schemas/BlockInfo'
+
+    BlockInfo:
+      type: object
+      properties:
+        client_id:
+          type: integer
+          example: 123
+        block_status:
+          type: string
+          example: 'BLOCKED'
+        initiated_by:
+          type: string
+          example: 'employer_123'
+        initiated_at:
+          type: string
+          format: date-time
+          example: '2024-11-11T11:11:00Z'
+        block_code:
+          $ref: '#/components/schemas/CodeStatus'
+
+    CodeStatus:
+      type: object
+      properties:
+        code_id:
+          type: integer
+          example: 69
+        code_name:
+          type: string
+          example: 'Неверно введенные реквизиты'
+        category:
+          type: string
+          description: 'Категория блокировки (например, FRAUD или CLIENT_REQUEST)'
+          example: 'FRAUD'
+
+    Payment:
+      type: object
+      properties:
+        payment_id:
+          type: integer
+          example: 69
+        client_id:
+          type: integer
+          example: 123
+        amount:
+          type: number
+          example: 20.50
+        time_payment:
+          type: string
+          format: date-time
+          example: '2024-11-11T11:11:00Z'
+        blocked:
+          type: boolean
+          example: true
+        code_status:
+          $ref: '#/components/schemas/CodeStatus'
