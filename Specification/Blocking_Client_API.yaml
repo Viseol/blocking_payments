@@ -2,7 +2,9 @@ openapi: 3.0.3
 info:
   title: Blocking Client API
   version: '1.0'
-  description: 'Спецификация API для управления блокировками платежей клиентов. Реализует операции блокировки, разблокировки и проверки статуса.'
+  description: >
+    Спецификация API для управления блокировками платежей клиентов.
+    Реализует операции блокировки, разблокировки и проверки статуса.
 
 paths:
   /Client/{client_id}/blockAll:
@@ -114,75 +116,93 @@ paths:
         '404':
           description: 'Клиент не найден'
 
-
 components:
   schemas:
     Client:
+      description: 'Информация о клиенте системы'
       type: object
       properties:
         client_id:
           type: integer
+          description: 'Уникальный идентификатор клиента в системе'
           example: 123
         name_client:
           type: string
+          description: 'Полное наименование клиента'
           example: 'ООО Чайная Железногорска'
         INN:
           type: string
+          description: 'Идентификационный номер налогоплательщика клиента'
           example: '123456789012'
         block_info:
           $ref: '#/components/schemas/BlockInfo'
 
     BlockInfo:
+      description: 'Подробная информация о текущем статусе клиента'
       type: object
       properties:
         client_id:
           type: integer
+          description: 'Идентификатор клиента'
           example: 123
         block_status:
           type: string
+          description: 'Текущий статус клиента'
           example: 'BLOCKED'
         initiated_by:
           type: string
+          description: 'Идентификатор пользователя или сотрудника, совершившего действие'
           example: 'employer_123'
         initiated_at:
           type: string
           format: date-time
+          description: 'Дата и время, когда была произведена операция'
           example: '2024-11-11T11:11:00Z'
         block_code:
           $ref: '#/components/schemas/CodeStatus'
 
     CodeStatus:
+      description: 'Описание кодов блокировок'
       type: object
       properties:
         code_id:
           type: integer
+          description: 'Уникальный идентификатор кода блокировки'
           example: 69
         code_name:
           type: string
+          description: 'Имя причины блокировки'
           example: 'Неверно введенные реквизиты'
         category:
           type: string
-          description: 'Категория блокировки (например, FRAUD или CLIENT_REQUEST)'
+          description: 'Категория блокировки'
           example: 'FRAUD'
 
     Payment:
+      description: 'Информация о платежах клиента'
       type: object
       properties:
         payment_id:
           type: integer
+          description: 'Уникальный идентификатор платежа'
           example: 69
         client_id:
           type: integer
+          description: 'Идентификатор клиента'
           example: 123
         amount:
           type: number
+          description: 'Сумма платежа'
           example: 20.50
         time_payment:
           type: string
           format: date-time
+          description: 'Дата и время проведения платежа'
           example: '2024-11-11T11:11:00Z'
         blocked:
           type: boolean
+          description: 'Заблокирован ли платёж'
           example: true
         code_status:
           $ref: '#/components/schemas/CodeStatus'
+
